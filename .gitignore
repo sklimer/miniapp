@@ -1,37 +1,32 @@
 ```
 # Dependencies
-venv/
-.venv/
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+node_modules/
 
-# Environment variables
+# Build outputs
+dist/
+build/
+*.js
+*.ts
+*.tsx
+*.css
+
+# Environment
 .env
 .env.local
 *.env.*
 
-# Logs
-*.log
-
-# Coverage reports
-.coverage
-coverage/
-htmlcov/
-
-# IDE
+# Editors
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# OS
-.DS_Store
-Thumbs.db
+# Logs
+*.log
 
-# Build artifacts
-build/
-dist/
-*.egg-info/
+# Temp files
+*.tmp
+
+# TypeScript
+*.tsbuildinfo
 ```
