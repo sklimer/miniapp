@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .api.v1.routers import users, menu, orders, payments, delivery, notifications, analytics
-from .config import settings
-from .database import database
+from app.api.v1.api import api_router
+from .core.config import settings
+from .core.database import database
 import uvicorn
 
 app = FastAPI(
@@ -28,14 +28,8 @@ async def startup():
 async def shutdown():
     await database.disconnect()
 
-# Include API routers
-app.include_router(users.router, prefix="/api/v1", tags=["users"])
-app.include_router(menu.router, prefix="/api/v1", tags=["menu"])
-app.include_router(orders.router, prefix="/api/v1", tags=["orders"])
-app.include_router(payments.router, prefix="/api/v1", tags=["payments"])
-app.include_router(delivery.router, prefix="/api/v1", tags=["delivery"])
-app.include_router(notifications.router, prefix="/api/v1", tags=["notifications"])
-app.include_router(analytics.router, prefix="/api/v1", tags=["analytics"])
+# Include API router
+app.include_router(api_router, prefix="/api/v1")
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
