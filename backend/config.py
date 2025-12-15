@@ -4,7 +4,11 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     # Database settings
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql://user:password@localhost/restaurant_db")
+
+    DATABASE_URL: str = os.getenv("DATABASE_URL",
+                                      "postgresql+asyncpg://postgres:admin@localhost:5432/restaurant_db")
+    DATABASE_URL_SYNC: str = os.getenv("DATABASE_URL_SYNC",
+                                           "postgresql+psycopg2://postgres:admin@localhost:5432/restaurant_db")
     
     # Telegram settings
     TELEGRAM_BOT_TOKEN: str = os.getenv("TELEGRAM_BOT_TOKEN", "")
