@@ -1,0 +1,82 @@
+from datetime import datetime
+from decimal import Decimal
+from typing import Optional, List
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Text, Numeric, ForeignKey
+from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
+from . import Base
+
+
+class Category(Base):
+    __tablename__ = "categories"
+
+    id: int = Column(Integer, primary_key=True, index=True)
+    name: str = Column(String, nullable=False)
+    description: Optional[str] = Column(Text, nullable=True)
+    image_url: Optional[str] = Column(String, nullable=True)
+    position: int = Column(Integer, default=0)
+    is_active: bool = Column(Boolean, default=True)
+    created_at: datetime = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at: datetime = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
+
+    # Relationship
+    products = relationship("Product", back_populates="category")
+
+
+class Product(Base):
+    __tablename__ = "products"
+
+    id: int = Column(Integer, primary_key=True, index=True)
+    name: str = Column(String, nullable=False)
+    description: Optional[str] = Column(Text, nullable=True)
+    price: Decimal = Column(Numeric(precision=10, scale=2), nullable=False)
+    category_id: int = Column(Integer, ForeignKey("categories.id"), nullable=False)
+    image_url: Optional[str] = Column(String, nullable=True)
+    weight: Optional[str] = Column(String, nullable=True)  # e.g., "200g", "1L"
+    calories: Optional[int] = Column(Integer, nullable=True)  # kcal per portion
+    cooking_time: Optional[int] = Column(Integer, nullable=True)  # in minutes
+    ingredients: Optional[str] = Column(Text, nullable=True)
+    is_available: bool = Column(Boolean, default=True)
+    is_featured: bool = Column(Boolean, default=False)
+    position: int = Column(Integer, default=0)
+    created_at: datetime = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at: datetime = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
+
+    # Relationships
+    category = relationship("Category", back_populates="products")
+    order_items = relationship("OrderItem", back_populates="product")
+
+
+class ProductOptionGroup(Base):
+    __tablename__ = "product_option_groups"
+
+    id: int = Column(Integer, primary_key=True, index=True)
+    product_id: int = Column(Integer, ForeignKey("products.id"), nullable=False)
+    name: str = Column(String, nullable=False)  # e.g., "Size", "Topping", "Sauce"
+    min_selections: int = Column(Integer, default=0)  # minimum number of options to select
+    max_selections: int = Column(Integer, default=1)  # maximum number of options to select
+    is_required: bool = Column(Boolean, default=False)
+    position: int = Column(Integer, default=0)
+    created_at: datetime = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at: datetime = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
+
+    # Relationships
+    product = relationship("Product", back_populates="option_groups")
+    options = relationship("ProductOption", back_populates="group")
+
+
+class ProductOption(Base):
+    __tablename__ = "product_options"
+
+    id: int = Column(Integer, primary_key=True, index=True)
+    group_id: int = Column(Integer, ForeignKey("product_option_groups.id"), nullable=False)
+    name: str = Column(String, nullable=False)  # e.g., "Small", "Large", "Extra Cheese"
+    price_delta: Decimal = Column(Numeric(precision=10, scale=2), default=0.00)  # additional cost
+    is_available: bool = Column(Boolean, default=True)
+    position: int = Column(Integer, default=0)
+    created_at: datetime = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at: datetime = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
+
+    # Relationships
+    group = relationship("ProductOptionGroup", back_populates="options")
+    selected_in_items = relationship("OrderItemOption", back_populates="option")
