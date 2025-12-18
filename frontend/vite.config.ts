@@ -13,5 +13,13 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 5173,
+    allowedHosts: [
+      'dev.proxy.example.com',
+      'localhost.proxy.example.com',
+      'nks.proxy.example.com',
+      'w0c.proxy.example.com',
+      '0g5.proxy.example.com',
+      'proxy.example.com' // Основной домен
+    ]
   },
 });

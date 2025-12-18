@@ -69,14 +69,19 @@ alembic upgrade head
 #### Backend
 ```bash
 cd backend
-uvicorn main:app --reload
-```
+uvicorn app.main:app --reload
 
 #### Frontend
 ```bash
 cd frontend
 npm run dev
 ```
+### Запуск сервера в git bash 
+```bash
+cd frontend
+ssh -p 2222 dev.proxy.example.com -R dev:80:localhost:5173
+```
+
 
 ## Настройка Telegram Bot
 
