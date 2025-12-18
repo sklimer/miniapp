@@ -23,10 +23,32 @@ class DeliveryZone(Base):
     center_lat: Decimal = Column(Numeric(precision=9, scale=6), nullable=False)  # center latitude
     center_lon: Decimal = Column(Numeric(precision=9, scale=6), nullable=False)  # center longitude
     radius_km: Decimal = Column(Numeric(precision=8, scale=2), nullable=False)  # radius in km
+    min_lat: Decimal = Column(Numeric(precision=9, scale=6), nullable=False)  # minimum latitude
+    max_lat: Decimal = Column(Numeric(precision=9, scale=6), nullable=False)  # maximum latitude
+    min_lon: Decimal = Column(Numeric(precision=9, scale=6), nullable=False)  # minimum longitude
+    max_lon: Decimal = Column(Numeric(precision=9, scale=6), nullable=False)  # maximum longitude
     
     # Timestamps
     created_at: datetime = Column(DateTime(timezone=True), server_default=func.now())
     updated_at: datetime = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
+
+
+class DeliveryCost(Base):
+    __tablename__ = "delivery_costs"
+
+    id: int = Column(Integer, primary_key=True, index=True)
+    zone_id: int = Column(Integer, ForeignKey("delivery_zones.id"), nullable=False)  # reference to delivery zone
+    min_order_amount: Decimal = Column(Numeric(precision=10, scale=2), default=0.00)  # minimum order amount for this delivery cost
+    cost: Decimal = Column(Numeric(precision=10, scale=2), nullable=False)  # delivery cost
+    is_free: bool = Column(Boolean, default=False)  # if True, delivery is free in this zone
+    is_flat_rate: bool = Column(Boolean, default=False)  # if True, cost is fixed regardless of distance
+    
+    # Timestamps
+    created_at: datetime = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at: datetime = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
+
+    # Relationships
+    zone = relationship("DeliveryZone")
 
 
 class DeliverySettings(Base):

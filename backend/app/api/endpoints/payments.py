@@ -9,9 +9,9 @@ from datetime import datetime
 from app.core.database import get_db
 from app.core.config import settings
 from app.schemas.payments import Payment, PaymentCreate, PaymentUpdate, CreatePaymentRequest, PaymentResponse
-from app.models.payment import Payment as PaymentModel
-from app.models.order import Order as OrderModel
-from app.models.user import User as UserModel
+from app.models.payments import Payment as PaymentModel
+from app.models.orders import Order as OrderModel
+from app.models.users import User as UserModel
 
 router = APIRouter()
 

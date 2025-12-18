@@ -6,8 +6,8 @@ from datetime import datetime
 
 from app.core.database import get_db
 from app.schemas.orders import Order, OrderCreate, OrderUpdate, OrderItem
-from app.models.order import Order as OrderModel, OrderItem as OrderItemModel
-from app.models.user import User as UserModel
+from app.models.orders import Order as OrderModel, OrderItem as OrderItemModel
+from app.models.users import User as UserModel
 from app.models.menu import Product as ProductModel
 
 router = APIRouter()
