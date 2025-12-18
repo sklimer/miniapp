@@ -8,7 +8,7 @@ import time
 from app.core.database import get_db
 from app.core.config import settings
 from app.schemas.users import User, UserCreate, UserUpdate
-from app.models.user import User as UserModel
+from app.models.users import User as UserModel
 
 router = APIRouter()
 
@@ -197,13 +197,13 @@ async def telegram_auth(
         return User.from_orm(db_user)
 
 
-@router.get("/{user_id}/orders", response_model=List[Order])
+@router.get("/{user_id}/orders", response_model=List[OrderSchema])
 async def get_user_orders(
     user_id: int,
     db: AsyncSession = Depends(get_db)
 ):
     """Get all orders for a specific user"""
-    from app.models.order import Order as OrderModel
+    from app.models.orders import Order as OrderModel
     from app.schemas.orders import Order as OrderSchema
     
     result = await db.execute(
